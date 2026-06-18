@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a new detection rule or improvement
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What dangerous command or situation should oops-guard catch?
+      description: Describe the command and the "oops" it would prevent.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: What should oops-guard say, and at what severity?
+    validations:
+      required: true
+  - type: textarea
+    id: safe
+    attributes:
+      label: What similar-looking commands must stay quiet?
+      description: A good rule is specific. List the everyday commands it must NOT flag.

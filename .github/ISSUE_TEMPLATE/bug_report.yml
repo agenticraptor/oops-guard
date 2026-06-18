@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a problem with oops-guard
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for filing a bug! Please fill out the details below so we can reproduce it.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `oops-guard version`
+      placeholder: oops-guard 0.1.0 (commit abc1234, built ...)
+    validations:
+      required: true
+  - type: dropdown
+    id: shell
+    attributes:
+      label: Shell
+      options:
+        - zsh
+        - bash
+        - fish
+        - other
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: The command involved
+      description: What command did oops-guard get wrong — by flagging something safe, or by missing something dangerous?
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what did you expect?
+      description: Tip — paste the output of `oops-guard check --no-color '<your command>'`.
+    validations:
+      required: true
