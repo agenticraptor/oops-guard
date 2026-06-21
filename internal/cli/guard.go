@@ -63,7 +63,7 @@ You normally don't run this yourself — install the hook with:
 			if ok {
 				return nil
 			}
-			fmt.Fprintln(out, "oops-guard: cancelled.")
+			fmt.Fprintln(out, "oops-guard: canceled.")
 			return exitCodeError{declineExitCode}
 		},
 	}
