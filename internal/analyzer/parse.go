@@ -147,7 +147,7 @@ func Parse(line string) Pipeline {
 		case '\'':
 			hasTok = true
 			for i++; i < len(runes) && runes[i] != '\''; i++ {
-				cur.WriteRune(runes[i])
+				_, _ = cur.WriteRune(runes[i])
 			}
 		case '"':
 			hasTok = true
@@ -155,13 +155,13 @@ func Parse(line string) Pipeline {
 				if runes[i] == '\\' && i+1 < len(runes) {
 					i++
 				}
-				cur.WriteRune(runes[i])
+				_, _ = cur.WriteRune(runes[i])
 			}
 		case '\\':
 			hasTok = true
 			if i+1 < len(runes) {
 				i++
-				cur.WriteRune(runes[i])
+				_, _ = cur.WriteRune(runes[i])
 			}
 		case ' ', '\t':
 			flushTok()
@@ -193,7 +193,7 @@ func Parse(line string) Pipeline {
 			args = append(args, op)
 		default:
 			hasTok = true
-			cur.WriteRune(ch)
+			_, _ = cur.WriteRune(ch)
 		}
 	}
 	flushCmd(len(runes), false)

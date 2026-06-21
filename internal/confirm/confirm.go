@@ -112,11 +112,11 @@ func readLineRaw(f *os.File) (string, error) {
 		case c == 127 || c == 8: // backspace / delete
 			if s := sb.String(); s != "" {
 				sb.Reset()
-				sb.WriteString(s[:len(s)-1])
+				_, _ = sb.WriteString(s[:len(s)-1])
 				_, _ = f.Write([]byte("\b \b"))
 			}
 		default:
-			sb.WriteByte(c)
+			_ = sb.WriteByte(c)
 			_, _ = f.Write(b[:])
 		}
 	}

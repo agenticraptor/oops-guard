@@ -3,6 +3,7 @@ package llm
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -73,7 +74,7 @@ func (c *anthropicClient) Complete(ctx context.Context, req Request) (string, er
 	var b strings.Builder
 	for _, blk := range out.Content {
 		if blk.Type == "text" {
-			b.WriteString(blk.Text)
+			fmt.Fprint(&b, blk.Text)
 		}
 	}
 	return strings.TrimSpace(b.String()), nil

@@ -25,3 +25,6 @@ coverage.html
 
 # Demo capture
 docs/demo.gif.tmp
+
+# Local top-level helper scripts (keep ad-hoc shell scripts out of the repo)
+/*.sh

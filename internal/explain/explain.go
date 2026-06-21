@@ -7,6 +7,7 @@ package explain
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/agenticraptor/oops-guard/internal/analyzer"
@@ -25,23 +26,17 @@ Be concise and concrete. Do not invent flags or behavior. If the command is harm
 // them rather than starting cold.
 func Explain(ctx context.Context, client llm.Client, command string, a analyzer.Assessment) (string, error) {
 	var b strings.Builder
-	b.WriteString("Command:\n")
-	b.WriteString(command)
-	b.WriteString("\n\n")
+	// strings.Builder.Write* never returns a non-nil error; fmt.Fprintf keeps
+	// errcheck satisfied without littering blank assignments.
+	fmt.Fprintf(&b, "Command:\n%s\n\n", command)
 	if len(a.Findings) > 0 {
-		b.WriteString("A static rule checker already flagged:\n")
+		fmt.Fprint(&b, "A static rule checker already flagged:\n")
 		for _, f := range a.Findings {
-			b.WriteString("- [")
-			b.WriteString(f.Severity.Label())
-			b.WriteString("] ")
-			b.WriteString(f.Title)
-			b.WriteString(": ")
-			b.WriteString(f.Detail)
-			b.WriteString("\n")
+			fmt.Fprintf(&b, "- [%s] %s: %s\n", f.Severity.Label(), f.Title, f.Detail)
 		}
-		b.WriteString("\nConfirm, correct, or add to this, then give the verdict.")
+		fmt.Fprint(&b, "\nConfirm, correct, or add to this, then give the verdict.")
 	} else {
-		b.WriteString("A static rule checker found nothing dangerous. Sanity-check that and give the verdict.")
+		fmt.Fprint(&b, "A static rule checker found nothing dangerous. Sanity-check that and give the verdict.")
 	}
 
 	return client.Complete(ctx, llm.Request{

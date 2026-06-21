@@ -14,7 +14,7 @@ func newInitCmd() *cobra.Command {
 		Use:       "init <bash|zsh|fish>",
 		Short:     "Print the shell integration snippet",
 		ValidArgs: shell.Supported(),
-		Args:      cobra.ExactValidArgs(1),
+		Args:      cobra.MatchAll(cobra.ExactArgs(1), cobra.OnlyValidArgs),
 		Long: `init prints the shell hook that makes oops-guard inspect commands before
 they run. Add it to your shell startup file:
 

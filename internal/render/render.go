@@ -59,30 +59,32 @@ func renderText(w io.Writer, a analyzer.Assessment, opts Options) error {
 	p := painter{color: opts.Color}
 	var b strings.Builder
 
+	// strings.Builder.WriteString never returns a non-nil error; fmt.Fprint to
+	// the builder keeps errcheck satisfied without blank assignments.
 	if len(a.Findings) == 0 {
-		b.WriteString(p.ok("✓ oops-guard") + "  nothing destructive detected\n")
+		fmt.Fprint(&b, p.ok("✓ oops-guard")+"  nothing destructive detected\n")
 		if a.Input != "" {
-			b.WriteString("  " + p.dim(a.Input) + "\n")
+			fmt.Fprint(&b, "  "+p.dim(a.Input)+"\n")
 		}
 		_, err := io.WriteString(w, b.String())
 		return err
 	}
 
-	b.WriteString(p.sev(a.Max(), p.icon(a.Max())+" oops-guard") + "  this looks destructive\n\n")
+	fmt.Fprint(&b, p.sev(a.Max(), p.icon(a.Max())+" oops-guard")+"  this looks destructive\n\n")
 	if a.Input != "" {
-		b.WriteString("  " + p.bold(a.Input) + "\n\n")
+		fmt.Fprint(&b, "  "+p.bold(a.Input)+"\n\n")
 	}
 
 	for _, f := range a.Findings {
 		tag := p.sev(f.Severity, fmt.Sprintf("%s %-8s", p.icon(f.Severity), f.Severity.Label()))
-		b.WriteString("  " + tag + "  " + p.bold(f.Title) + "\n")
+		fmt.Fprint(&b, "  "+tag+"  "+p.bold(f.Title)+"\n")
 		for _, ln := range wrap(f.Detail, width-5) {
-			b.WriteString("     " + ln + "\n")
+			fmt.Fprint(&b, "     "+ln+"\n")
 		}
 		for _, ti := range f.Impact {
-			b.WriteString("     " + p.dim(impactLine(ti)) + "\n")
+			fmt.Fprint(&b, "     "+p.dim(impactLine(ti))+"\n")
 		}
-		b.WriteString("\n")
+		fmt.Fprint(&b, "\n")
 	}
 
 	_, err := io.WriteString(w, strings.TrimRight(b.String(), "\n")+"\n")
